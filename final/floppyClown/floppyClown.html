@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Itim&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/index.css">
+<title>Floppy Clown</title>
+</head>
+<body onload="startGame()">
+
+<div class="topnav" id="myTopnav">
+  <a href="../index.html">Home</a>
+  <a href="../jigsaw/jigsaw.html">Jigsaw Puzzle</a>
+  <a href="#" class="active">Floppy Clown</a>
+  <a href="../memory/memory.html">Memory</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+<br>
+<div id="main" style="padding-left:16px">
+    <h2>Floppy Clown</h2>
+    <p>Help floppy clown avoid running into walls by using your arrow keys.</p> 
+    <div id="canvasDiv">
+      <canvas id="canvas"> Your browser does not support the HTML5 canvas tag.</canvas>
+  </div>
+  <div>
+          <button id="playAgain" onclick="location=URL">Play Again</button>
+      </div>
+  <script src="js/canvasGame.js"></script>
+</div>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+
+</body>
+</html>

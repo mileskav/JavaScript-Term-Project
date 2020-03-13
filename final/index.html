@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="css/index.css">
+<title>Game Index</title>
+</head>
+<body>
+<!--audience: anyone interested in simple online games
+design layout: top navigation bar that links to the game pages
+color scheme: neon, colors chosen from background image-->
+<div class="topnav" id="myTopnav">
+  <a href="#" class="active">Home</a>
+  <a href="jigsaw/jigsaw.html">Jigsaw Puzzle</a>
+  <a href="floppyClown/floppyClown.html">Floppy Clown</a>
+  <a href="memory/memory.html">Memory</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+<br>
+<div id="main" style="padding-left:16px">
+    <h2>CIT 190 - JavaScript Games</h2>
+    <h3>Game Index</h3>
+    <p>Games are available from the menu above.</p>
+</div>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+
+</body>
+</html>
