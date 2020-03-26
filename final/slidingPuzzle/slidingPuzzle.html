@@ -3,32 +3,28 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://fonts.googleapis.com/css?family=Itim&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/index.css">
-<title>Floppy Clown</title>
+<title>Game Index</title>
 </head>
-<body onload="startGame()">
+<body>
 
 <div class="topnav" id="myTopnav">
   <a href="../index.html">Home</a>
-  <a href="../slidingPuzzle/slidingPuzzle.html">Sliding Puzzle</a>
-  <a href="#" class="active">Floppy Clown</a>
+  <a href="#" class="active">Sliding Puzzle</a>
+  <a href="../floppyClown/floppyClown.html">Floppy Clown</a>
   <a href="../memory/memory.html">Memory</a>
   <a href="javascript:void(0);" class="icon" onclick="myFunction()">
     <i class="fa fa-bars"></i>
   </a>
 </div>
 <br>
-<div id="main" style="padding-left:16px">
-    <h2>Floppy Clown</h2>
-    <p>Help floppy clown avoid running into walls by using your arrow keys.</p> 
-    <div>
-      <canvas id="canvas">Your browser does not support the HTML5 canvas tag.</canvas>
-  </div>
-  <div>
-          <button id="playAgain" onclick="location=URL">Play Again</button>
-      </div>
-  <script src="js/canvasGame.js"></script>
+
+<div id="main">
+  <h2>Sliding Puzzle</h2>
+  <p>Drag the puzzle pieces back into their correct locations. </p>
+  <p><a href="gameWindow.html" target="_blank">
+    <input type="button" class="button" value="Open Game in New Window" />
+    </a></p>
 </div>
 
 <script>
