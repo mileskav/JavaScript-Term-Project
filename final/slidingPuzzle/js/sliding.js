@@ -1,224 +1,226 @@
 // js coded by following: https://code.tutsplus.com/tutorials/create-an-html5-canvas-tile-swapping-puzzle--active-10747
 // determines amount of puzzle pieces
-const PUZZLE_DIFFICULTY = 4;
-const PUZZLE_HOVER_TINT = '#00d0ff';
+const DIFFICULTY = 4;
+const PUZZLE_TINT = '#00d0ff';
 
-var canvas;
-var stage;
+var gameCanvas;
+var gameStage;
 
-var img;
-var pieces;
-var puzzleWidth;
-var puzzleHeight;
-var pieceWidth;
-var pieceHeight;
-var currentPiece;
-var currentDropPiece;
+var image;
+var puzzlePieces;
+// puzzle variables
+var puzW;
+var puzH;
+// puzzle piece variables
+var pieceW;
+var pieceH;
+var curPiece;
+var curDropPiece;
 
-var mouse;
+var cntrlMouse;
 
 // create image/canvas and set puzzle piece variables
 function startGame(){
-    img = new Image();
-    img.addEventListener('load', onImage, false);
-    img.src = "media/mountain.jpg";
+    image = new Image();
+    image.addEventListener('load', onImage, false);
+    image.src = "media/mountain.jpg";
 }
 function onImage(e){
-    pieceWidth = Math.floor(img.width / PUZZLE_DIFFICULTY)
-    pieceHeight = Math.floor(img.height / PUZZLE_DIFFICULTY)
-    puzzleWidth = pieceWidth * PUZZLE_DIFFICULTY;
-    puzzleHeight = pieceHeight * PUZZLE_DIFFICULTY;
-    setCanvas();
-    initPuzzle();
+    pieceW = Math.floor(image.width / DIFFICULTY)
+    pieceH = Math.floor(image.height / DIFFICULTY)
+    puzW = pieceW * DIFFICULTY;
+    puzH = pieceH * DIFFICULTY;
+    setGameCanvas();
+    startPuzzle();
 }
-function setCanvas(){
-    canvas = document.getElementById('canvas');
-    stage = canvas.getContext('2d');
-    canvas.width = puzzleWidth;
-    canvas.height = puzzleHeight;
-    canvas.style.border = "1px solid grey";
+function setGameCanvas(){
+    gameCanvas = document.getElementById('canvas');
+    gameStage = gameCanvas.getContext('2d');
+    gameCanvas.width = puzW;
+    gameCanvas.height = puzH;
+    gameCanvas.style.border = "1px solid grey";
 }
 // initialize puzzle and title screen
-function initPuzzle(){
-    pieces = [];
-    mouse = {x:0, y:0};
-    currentPiece = null;
-    currentDropPiece = null;
-    stage.drawImage(img, 0, 0, puzzleWidth, puzzleHeight, 0, 0, puzzleWidth, puzzleHeight);
-    createTitle("Click to Start Puzzle");
-    buildPieces();
+function startPuzzle(){
+    puzzlePieces = [];
+    cntrlMouse = {x:0, y:0};
+    curPiece = null;
+    curDropPiece = null;
+    gameStage.drawImage(image, 0, 0, puzW, puzH, 0, 0, puzW, puzH);
+    writeTitle("Click to Start Puzzle");
+    createPieces();
 }
-function createTitle(msg){
-    stage.fillStyle = "#000000";
-    stage.globalAlpha = .4;
-    stage.fillRect(100, puzzleHeight - 40, puzzleWidth - 200, 40);
-    stage.fillStyle = "#FFFFFF";
-    stage.globalAlpha = 1;
-    stage.textAlign = "center";
-    stage.textBaseline = "middle";
-    stage.font = "20px Arial";
-    stage.fillText(msg, puzzleWidth / 2, puzzleHeight - 20);
+function writeTitle(message){
+    gameStage.fillStyle = "#000000";
+    gameStage.globalAlpha = .4;
+    gameStage.fillRect(100, puzH - 40, puzW - 200, 40);
+    gameStage.fillStyle = "#FFFFFF";
+    gameStage.globalAlpha = 1;
+    gameStage.textAlign = "center";
+    gameStage.textBaseline = "middle";
+    gameStage.font = "20px Arial";
+    gameStage.fillText(message, puzW / 2, puzH - 20);
 }
 // create puzzle pieces
-function buildPieces(){
+function createPieces(){
     var i;
-    var piece;
-    var xPos = 0;
-    var yPos = 0;
-    for(i = 0; i < PUZZLE_DIFFICULTY * PUZZLE_DIFFICULTY; i++){
-        piece = {};
-        piece.sx = xPos;
-        piece.sy = yPos;
-        pieces.push(piece);
-        xPos += pieceWidth;
-        if(xPos >= puzzleWidth){
-            xPos = 0;
-            yPos += pieceHeight;
+    var puzzlePiece;
+    var xPosition = 0;
+    var yPosition = 0;
+    for(i = 0; i < DIFFICULTY * DIFFICULTY; i++){
+        puzzlePiece = {};
+        puzzlePiece.sx = xPosition;
+        puzzlePiece.sy = yPosition;
+        puzzlePieces.push(puzzlePiece);
+        xPosition += pieceW;
+        if(xPosition >= puzW){
+            xPosition = 0;
+            yPosition += pieceH;
         }
     }
-    document.onmousedown = shufflePuzzle;
+    document.onmousedown = shufflePieces;
 }
 // shuffle puzzle pieces on canvas
-function shufflePuzzle(){
-    pieces = shuffleArray(pieces);
-    stage.clearRect(0,0, puzzleWidth, puzzleHeight);
+function shufflePieces(){
+    puzzlePieces = arrayShuffle(puzzlePieces);
+    gameStage.clearRect(0,0, puzW, puzH);
     var i;
-    var piece;
-    var xPos = 0;
-    var yPos = 0;
-    for(i = 0; i < pieces.length; i++){
-        piece = pieces[i];
-        piece.xPos = xPos;
-        piece.yPos = yPos;
-        stage.drawImage(img, piece.sx, piece.sy, pieceWidth, pieceHeight, xPos, yPos, pieceWidth, pieceHeight);
-        stage.strokeRect(xPos, yPos, pieceWidth, pieceHeight);
-        xPos += pieceWidth;
-        if(xPos >= puzzleWidth){
-            xPos = 0;
-            yPos += pieceHeight;
+    var puzzlePiece;
+    var xPosition = 0;
+    var yPosition = 0;
+    for(i = 0; i < puzzlePieces.length; i++){
+        puzzlePiece = puzzlePieces[i];
+        puzzlePiece.xPosition = xPosition;
+        puzzlePiece.yPosition = yPosition;
+        gameStage.drawImage(image, puzzlePiece.sx, puzzlePiece.sy, pieceW, pieceH, xPosition, yPosition, pieceW, pieceH);
+        gameStage.strokeRect(xPosition, yPosition, pieceW, pieceH);
+        xPosition += pieceW;
+        if(xPosition >= puzW){
+            xPosition = 0;
+            yPosition += pieceH;
         }
     }
-    document.onmousedown = onPuzzleClick;
+    document.onmousedown = onClick;
 }
-function shuffleArray(o){
+function arrayShuffle(o){
     for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
 }
 // sets click events (drag/drop)
-function onPuzzleClick(e){
+function onClick(e){
     if(e.layerX || e.layerX == 0){
-        mouse.x = e.layerX - canvas.offsetLeft;
-        mouse.y = e.layerY - canvas.offsetTop;
+        cntrlMouse.x = e.layerX - gameCanvas.offsetLeft;
+        cntrlMouse.y = e.layerY - gameCanvas.offsetTop;
     }
     else if(e.offsetX || e.offsetX == 0){
-        mouse.x = e.offsetX - canvas.offsetLeft;
-        mouse.y = e.offsetY - canvas.offsetTop;
+        cntrlMouse.x = e.offsetX - gameCanvas.offsetLeft;
+        cntrlMouse.y = e.offsetY - gameCanvas.offsetTop;
     }
-    currentPiece = checkPieceClicked();
-    if(currentPiece != null){
-        stage.clearRect(currentPiece.xPos, currentPiece.yPos, pieceWidth, pieceHeight);
-        stage.save();
-        stage.globalAlpha = .9;
-        stage.drawImage(img, currentPiece.sx, currentPiece.sy, pieceWidth, pieceHeight,
-            mouse.x - (pieceWidth / 2), mouse.y - (pieceHeight / 2 ), pieceWidth, pieceHeight);
-        stage.restore();
-        document.onmousemove = updatePuzzle;
-        document.onmouseup = pieceDropped; 
+    curPiece = checkClicked();
+    if(curPiece != null){
+        gameStage.clearRect(curPiece.xPosition, curPiece.yPosition, pieceW, pieceH);
+        gameStage.save();
+        gameStage.globalAlpha = .9;
+        gameStage.drawImage(image, curPiece.sx, curPiece.sy, pieceW, pieceH,
+            cntrlMouse.x - (pieceW / 2), cntrlMouse.y - (pieceH / 2 ), pieceW, pieceH);
+        gameStage.restore();
+        document.onmousemove = updateCanvas;
+        document.onmouseup = dropPiece; 
     }
-    function checkPieceClicked(){
+    function checkClicked(){
         var i;
-        var piece;
-        for(i = 0; i < pieces.length; i++){
-            piece = pieces[i];
-            if(mouse.x < piece.xPos || mouse.x > (piece.xPos + pieceWidth) 
-            || mouse.y < piece.yPos || mouse.y > (piece.yPos + pieceHeight)){
+        var puzzlePiece;
+        for(i = 0; i < puzzlePieces.length; i++){
+            puzzlePiece = puzzlePieces[i];
+            if(cntrlMouse.x < puzzlePiece.xPosition || cntrlMouse.x > (puzzlePiece.xPosition + pieceW) 
+            || cntrlMouse.y < puzzlePiece.yPosition || cntrlMouse.y > (puzzlePiece.yPosition + pieceH)){
                 // piece not hit
             }
             else{
                 // piece in bounds of click, so return piece
-                return piece;
+                return puzzlePiece;
             }
         }
         return null;
     }
-    function updatePuzzle(e){
-        currentDropPiece = null;
+    function updateCanvas(e){
+        curDropPiece = null;
         if(e.layerX || e.layerX == 0){
-            mouse.x = e.layerX - canvas.offsetLeft;
-            mouse.y = e.layerY - canvas.offsetTop;
+            cntrlMouse.x = e.layerX - gameCanvas.offsetLeft;
+            cntrlMouse.y = e.layerY - gameCanvas.offsetTop;
         }
         else if(e.offsetX || e.offsetX == 0){
-            mouse.x = e.offsetX - canvas.offsetLeft;
-            mouse.y = e.offsetY - canvas.offsetTop;
+            cntrlMouse.x = e.offsetX - gameCanvas.offsetLeft;
+            cntrlMouse.y = e.offsetY - gameCanvas.offsetTop;
         }
-        stage.clearRect(0,0,puzzleWidth,puzzleHeight);
+        gameStage.clearRect(0,0,puzW,puzH);
         var i;
-        var piece;
-        for(i = 0; i < pieces.length; i++){
-            piece = pieces[i];
-            if(piece == currentPiece){
+        var puzzlePiece;
+        for(i = 0; i < puzzlePieces.length; i++){
+            puzzlePiece = puzzlePieces[i];
+            if(puzzlePiece == curPiece){
                 continue;
             }
-            stage.drawImage(img, piece.sx, piece.sy, pieceWidth, pieceHeight, 
-                piece.xPos, piece.yPos, pieceWidth, pieceHeight);
-            stage.strokeRect(piece.xPos, piece.yPos, pieceWidth, pieceHeight);
-            if(currentDropPiece == null){
-                if(mouse.x < piece.xPos || mouse.x > (piece.xPos + pieceWidth) 
-                || mouse.y < piece.yPos || mouse.y > (piece.yPos + pieceHeight)){
+            gameStage.drawImage(image, puzzlePiece.sx, puzzlePiece.sy, pieceW, pieceH, 
+                puzzlePiece.xPosition, puzzlePiece.yPosition, pieceW, pieceH);
+            gameStage.strokeRect(puzzlePiece.xPosition, puzzlePiece.yPosition, pieceW, pieceH);
+            if(curDropPiece == null){
+                if(cntrlMouse.x < puzzlePiece.xPosition || cntrlMouse.x > (puzzlePiece.xPosition + pieceW) 
+                || cntrlMouse.y < puzzlePiece.yPosition || cntrlMouse.y > (puzzlePiece.yPosition + pieceH)){
                     // not over
                 }
                 else{
-                    currentDropPiece = piece;
-                    stage.save();
-                    stage.globalAlpha = .4;
-                    stage.fillStyle = PUZZLE_HOVER_TINT;
-                    stage.fillRect(currentDropPiece.xPos, currentDropPiece.yPos, 
-                        pieceWidth, pieceHeight);
-                    stage.restore();
+                    curDropPiece = puzzlePiece;
+                    gameStage.save();
+                    gameStage.globalAlpha = .4;
+                    gameStage.fillStyle = PUZZLE_TINT;
+                    gameStage.fillRect(curDropPiece.xPos, curDropPiece.yPos, 
+                        pieceW, pieceH);
+                    gameStage.restore();
                 }
             }
         }
         
-        stage.save();
-        stage.globalAlpha = .6;
-        stage.drawImage(img, currentPiece.sx, currentPiece.sy, pieceWidth, pieceHeight,
-            mouse.x - (pieceWidth / 2), mouse.y - (pieceHeight / 2), pieceWidth, pieceHeight);
-        stage.restore();
-        stage.strokeRect(mouse.x - (pieceWidth / 2), mouse.y - (pieceHeight / 2), pieceWidth, pieceHeight);
+        gameStage.save();
+        gameStage.globalAlpha = .6;
+        gameStage.drawImage(image, curPiece.sx, curPiece.sy, pieceW, pieceH,
+            cntrlMouse.x - (pieceW / 2), cntrlMouse.y - (pieceH / 2), pieceW, pieceH);
+        gameStage.restore();
+        gameStage.strokeRect(cntrlMouse.x - (pieceW / 2), cntrlMouse.y - (pieceH / 2), pieceW, pieceH);
     }
-    function pieceDropped(e){
+    function dropPiece(e){
         document.onmousemove = null;
         document.onmouseup = null;
-        if(currentDropPiece != null){
-            var tmp = {xPos : currentPiece.xPos, yPos : currentPiece.yPos};
-            currentPiece.xPos = currentDropPiece.xPos;
-            currentPiece.yPos = currentDropPiece.yPos;
-            currentDropPiece.xPos = tmp.xPos;
-            currentDropPiece.yPos = tmp.yPos;
+        if(curDropPiece != null){
+            var tmp = {xPosition : curPiece.xPosition, yPosition : curPiece.yPosition};
+            curPiece.xPosition = curDropPiece.xPosition;
+            curPiece.yPosition = curDropPiece.yPosition;
+            curDropPiece.xPosition = tmp.xPosition;
+            curDropPiece.yPosition = tmp.yPosition;
         }
-        resetPuzzleAndCheckWin();
+        resetPuzWinCheck();
     }
-    function resetPuzzleAndCheckWin(){
-        stage.clearRect(0,0, puzzleWidth, puzzleHeight);
-        var gameWin = true;
+    function resetPuzWinCheck(){
+        gameStage.clearRect(0,0, puzW, puzH);
+        var win = true;
         var i;
-        var piece;
-        for(i = 0; i < pieces.length; i++){
-            piece = pieces[i];
-            stage.drawImage(img, piece.sx, piece.sy, pieceWidth, pieceHeight, piece.xPos, piece.yPos, pieceWidth, pieceHeight)
-            stage.strokeRect(piece.xPos, piece.yPos, pieceWidth, pieceHeight);
-            if(piece.xPos != piece.sx || piece.yPos != piece.sy){
-                gameWin = false;
+        var puzzlePiece;
+        for(i = 0; i < puzzlePieces.length; i++){
+            puzzlePiece = puzzlePieces[i];
+            gameStage.drawImage(image, puzzlePiece.sx, puzzlePiece.sy, pieceW, pieceH, puzzlePiece.xPosition, puzzlePiece.yPosition, pieceW, pieceH)
+            gameStage.strokeRect(puzzlePiece.xPosition, puzzlePiece.yPosition, pieceW, pieceH);
+            if(puzzlePiece.xPosition != puzzlePiece.sx || puzzlePiece.yPosition != puzzlePiece.sy){
+                win = false;
             }
         }
-        if(gameWin){
-            setTimeout(gameOver, 500);
+        if(win){
+            setTimeout(gameEnd, 500);
         }
     }
-    function gameOver(){
+    function gameEnd(){
         document.onmousedown = null;
         document.onmousemove = null;
         document.onmouseup = null;
-        initPuzzle();
+        startPuzzle();
     }
 }
